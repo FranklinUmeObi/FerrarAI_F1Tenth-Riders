@@ -1,6 +1,5 @@
 import numpy as np
 
-
 #------------------------------------------------------------------------
 #Our Drivers Go here
 #------------------------------------------------------------------------
@@ -8,8 +7,26 @@ import numpy as np
 class Frank:
 
     def process_lidar(self, ranges):
-        speed = 5.0
+
+        baseSpeed = 7
+        whenToTurn = 5
+        softTurnRadius = 3.0
+
+
+        speed = baseSpeed
         steering_angle = 0.0
+
+        if( ranges[135*4] > 7 ):    #Go straight
+            speed = baseSpeed
+            steering_angle += 0.0
+        elif(ranges[90*4] < whenToTurn):    #soft right
+            speed = baseSpeed*0.5
+            steering_angle = softTurnRadius
+        elif(ranges[155*4] < whenToTurn):    #soft left
+            speed = baseSpeed*0.5
+            steering_angle = -softTurnRadius
+
+        
         return speed, steering_angle
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------

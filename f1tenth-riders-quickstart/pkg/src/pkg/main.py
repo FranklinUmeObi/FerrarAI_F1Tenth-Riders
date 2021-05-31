@@ -10,13 +10,13 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
 
 # import your drivers here
-from pkg.drivers import DisparityExtender, GapFollower
+from pkg.drivers import DisparityExtender, Frank
 
 # choose your drivers here (1-4)
-drivers = [DisparityExtender(), GapFollower()]
+drivers = [DisparityExtender(), Frank()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
-RACETRACK = 'SILVERSTONE'
+RACETRACK = 'SILVERSTONE_OBS'
 
 
 class GymRunner(object):
