@@ -10,10 +10,10 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
 
 # import your drivers here
-from pkg.drivers import DisparityExtender, Frank
+from drivers import DisparityExtender, Frank, GapFollower
 
 # choose your drivers here (1-4)
-drivers = [DisparityExtender(), Frank()]
+drivers = [Frank(), DisparityExtender()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
 RACETRACK = 'SILVERSTONE_OBS'

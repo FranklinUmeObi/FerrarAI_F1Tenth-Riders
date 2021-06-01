@@ -7,26 +7,60 @@ import numpy as np
 class Frank:
 
     def process_lidar(self, ranges):
+    #AI for Clean
+        # #Core variables
+        # baseSpeed = 16
+        # distToWallTrigger = 3.2
+        # turnStrength = 0.2
+        # breakDist = distToWallTrigger*1.3
 
-        baseSpeed = 7
-        whenToTurn = 5
-        softTurnRadius = 3.0
+        # #Init Outputs
+        # speed = baseSpeed
+        # steering_angle = 0.0
+        # if(ranges[440] < distToWallTrigger):    #turn left
+        #     speed = baseSpeed * 0.6
+        #     steering_angle = turnStrength
 
+        # if(ranges[640] < distToWallTrigger):    #turn right
+        #     speed = baseSpeed * 0.6
+        #     steering_angle =  -turnStrength
+        
+        # if(ranges[540] < breakDist or ranges[510] < breakDist or ranges[590] < breakDist):    #Don't crash
+        #     speed = baseSpeed * 0.2
+  
+#----------------------------------------------
+ #AI for Obstacles
+        #Core variables
+        baseSpeed = 9
+        distToWallTrigger = 3.2
+        turnStrength = 0.2
+        breakDist = distToWallTrigger*1.3
 
+        #Init Outputs
         speed = baseSpeed
         steering_angle = 0.0
+        if(ranges[440] < distToWallTrigger):    #turn left
+            speed = baseSpeed * 0.8
+            steering_angle = turnStrength
 
-        if( ranges[135*4] > 7 ):    #Go straight
-            speed = baseSpeed
-            steering_angle += 0.0
-        elif(ranges[90*4] < whenToTurn):    #soft right
-            speed = baseSpeed*0.5
-            steering_angle = softTurnRadius
-        elif(ranges[155*4] < whenToTurn):    #soft left
-            speed = baseSpeed*0.5
-            steering_angle = -softTurnRadius
+        if(ranges[640] < distToWallTrigger):    #turn right
+            speed = baseSpeed * 0.8
+            steering_angle =  -turnStrength
 
+        # if(ranges[0] < breakDist *0.3 ):    #Avoid left overtake
+        #      steering_angle =  turnStrength * -0.2
+        # if(ranges[1070] < breakDist *0.3 ):    #Avoid right overtake
+        #      steering_angle =  turnStrength * 0.2
         
+        if(ranges[540] < breakDist or ranges[510] < breakDist or ranges[590] < breakDist):    #Don't crash
+            speed = baseSpeed * 0.2
+            #steering_angle =  turnStrength * -0.002
+
+
+
+
+
+
         return speed, steering_angle
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
