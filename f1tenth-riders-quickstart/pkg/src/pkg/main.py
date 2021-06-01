@@ -16,7 +16,7 @@ from drivers import DisparityExtender, Frank, GapFollower
 drivers = [Frank(), DisparityExtender()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
-RACETRACK = 'SILVERSTONE_OBS'
+RACETRACK = 'SILVERSTONE'
 
 
 class GymRunner(object):
