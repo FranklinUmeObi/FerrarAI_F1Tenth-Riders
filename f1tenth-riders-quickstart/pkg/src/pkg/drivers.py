@@ -1,5 +1,5 @@
 import numpy as np
-
+import math as m
 #------------------------------------------------------------------------
 #Our Drivers Go here
 #------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class Sean:
     def getLeftAngle(self, ranges):
             third = int(len(ranges)/3)
             leftIndexes = ranges[0:third]
-
+        
             #calculate lhs using full pi/2 lhs scanner range
             lhsI2Angle = ((len(leftIndexes)/2)/len(leftIndexes))*(np.pi/2) #for index 134 (of 270, maxIndex = 269)
             lhsI3Angle = np.pi/2 - lhsI2Angle # pi/2 window minus other angle in it
@@ -289,49 +289,20 @@ class Sam:
         return speed, steering_angle
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
-
 class Chris:
     
     CAR_WIDTH = 0.31
-    # the min difference between adjacent LiDAR points for us to call them disparate
     DIFFERENCE_THRESHOLD = 2.
-    SPEED = 9. 
-    MAX_SPEED = 14
-    # the extra safety room we plan for along walls (as a percentage of car_width/2)
-    SAFETY_PERCENTAGE = 300.
-
-    def get_speed(self, ranges, max_disp,min_disp,proc_ranges,speed):
-        if (ranges[int(len(ranges)/2)] < 6) and (speed > 3) and (ranges[int(len(ranges)/2)+2] < 6) and (ranges[int(len(ranges)/2)-2] < 6):
-            speed = speed * 0.4
-        elif (ranges[int(len(ranges)/2)] < 10) and (speed > 9):
-            speed = speed * 0.5
-        elif (ranges[int(len(ranges)/2)] < 12) and (speed > 10):
-            speed = 9
-        else:
-            if speed < 8:
-                speed = speed * 1.1
-            if speed < 10:
-                speed = speed * 1.5
-            else:
-                speed = self.MAX_SPEED
-
-        return speed
+    SPEED = 13. 
+    MAX_SPEED = 13.5
+    SAFETY_PERCENTAGE = 350.
 
     def preprocess_lidar(self, ranges):
-        """ Any preprocessing of the LiDAR data can be done in this function.
-            Possible Improvements: smoothing of outliers in the data and placing
-            a cap on the maximum distance a point can be.
-        """
-        # remove quadrant of LiDAR directly behind us
         eighth = int(len(ranges)/8)
         return np.array(ranges[eighth:-eighth])
     
      
     def get_differences(self, ranges):
-        """ Gets the absolute difference between adjacent elements in
-            in the LiDAR data and returns them in an array.
-            Possible Improvements: replace for loop with numpy array arithmetic
-        """
         differences = [0.] # set first element to 0
         for i in range(1, len(ranges)):
             differences.append(abs(ranges[i]-ranges[i-1]))
@@ -422,11 +393,11 @@ class Chris:
         # if(ranges.argmin()>35):
         #     steering_angle = 0
         # else:
-        if range_index < 100 or range_index>980:
-            lidar_angle = (range_index - (range_len/2)) * self.radians_per_point
-            print(lidar_angle)
-            steering_angle = np.clip(lidar_angle, np.radians(-90), np.radians(90))*0.8
-        elif (ranges[int(len(ranges)/2)] < 5):
+        # if range_index < 100 or range_index>980:
+        #     lidar_angle = (range_index - (range_len/2)) * self.radians_per_point
+        #     print(lidar_angle)
+        #     steering_angle = np.clip(lidar_angle, np.radians(-90), np.radians(90))*0.8
+        if (ranges[int(len(ranges)/2)] < 5):
             lidar_angle = (range_index - (range_len/2)) * self.radians_per_point*0.6
             # print(lidar_angle)
             steering_angle = np.clip(lidar_angle, np.radians(-90), np.radians(90))
@@ -440,7 +411,33 @@ class Chris:
             steering_angle = np.clip(lidar_angle, np.radians(-90), np.radians(90))
 
         return steering_angle
-    
+    def get_speed(self, ranges, max_disp,min_disp,proc_ranges,speed):
+        # speed = 12
+        # if (ranges[max_disp] - ranges[min_disp]) < 0.5:
+        #     speed = speed * 0.2
+        # if max_disp < 100 or max_disp>980:
+        #     speed = speed * 0.2
+        # if ranges[max_disp] < 3:
+        #     speed = speed *0.2
+        if (ranges[int(len(ranges)/2)] < 6) and (speed > 3.5) and (ranges[int(len(ranges)/2)+2] < 6) and (ranges[int(len(ranges)/2)-2] < 6):
+            speed = speed * 0.6
+        elif (ranges[int(len(ranges)/2)] < 10) and (speed > 9):
+            speed = speed * 0.7
+        elif (ranges[int(len(ranges)/2)] < 12) and (speed >= 12):
+            speed = 11
+        elif (ranges[int(len(ranges)/2)] < 13.5) and (speed >= 13):
+            speed = 12.5
+        elif (ranges[int(len(ranges)/2)] > 20) and (speed >= 13):
+            speed = 16
+        else:
+            if speed < 8:
+                speed = speed * 1.1
+            if speed < 10:
+                speed = speed * 1.5
+            else:
+                speed = self.MAX_SPEED
+
+        return speed
     def process_lidar(self, ranges):
         """ Run the disparity extender algorithm!
             Possible improvements: varying the speed based on the
@@ -460,6 +457,8 @@ class Chris:
         print(self.SPEED)
         # if starp_corner
         return speed, steering_angle
+#------------------------------------------------------------------------
+#------------------------------------------------------------------------
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
 

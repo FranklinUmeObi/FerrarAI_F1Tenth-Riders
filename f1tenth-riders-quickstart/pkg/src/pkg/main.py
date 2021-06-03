@@ -16,6 +16,7 @@ from drivers import DisparityExtender, Frank, GapFollower, Chris
 drivers = [ Chris()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
+#RACETRACK = 'SILVERSTONE'
 RACETRACK = 'SILVERSTONE_OBS'
 
 
