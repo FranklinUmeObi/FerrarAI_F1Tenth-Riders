@@ -6,10 +6,10 @@ import numpy as np
 
 class Frank:
     #Core variables
-    baseSpeed = 9.5
-    distToWallTrigger = 3.2
-    turnStrength = 0.2
-    breakDist = distToWallTrigger*1.3
+    baseSpeed = 11
+    distToWallTrigger = 3.1
+    turnStrength = 0.1
+    brakeDist = distToWallTrigger*1.2
 
     def process_lidar(self, ranges):
         #Init Outputs
@@ -17,17 +17,17 @@ class Frank:
         steering_angle = 0.0
         #AI
         if(ranges[440] < self.distToWallTrigger):    #turn left
-            speed = self.baseSpeed * 0.9
+            speed = self.baseSpeed * 0.65
             steering_angle = self.turnStrength
 
         if(ranges[640] < self.distToWallTrigger):    #turn right
-            speed = self.baseSpeed * 0.9
+            speed = self.baseSpeed * 0.65
             steering_angle =  -self.turnStrength
 
-        if(ranges[540] < self.breakDist or 
-           ranges[520] < self.breakDist or 
-           ranges[560] < self.breakDist):    #Don't crash
-            speed = self.baseSpeed * 0.2
+        if(ranges[540] < self.brakeDist or 
+           ranges[520] < self.brakeDist or 
+           ranges[560] < self.brakeDist):    #Don't crash
+            speed = self.baseSpeed * 0.1
             
         return speed, steering_angle
 #------------------------------------------------------------------------
