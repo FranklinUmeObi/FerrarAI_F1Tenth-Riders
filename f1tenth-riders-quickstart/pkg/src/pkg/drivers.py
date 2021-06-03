@@ -64,9 +64,9 @@ class Chris:
     SAFETY_PERCENTAGE = 300.
 
     #below 4 funcs tell if car is on straight, can use this to accel faster here
-    def getLeftAngle(self, ranges):
-            third = int(len(ranges)/3)
-            leftIndexes = ranges[0:third]
+    def getLeftAngle(self, proc_ranges):
+            third = int(len(proc_ranges)/3)
+            leftIndexes = proc_ranges[0:third]
 
             #calculate lhs using full pi/2 lhs scanner range
             lhsI2Angle = ((len(leftIndexes)/2)/len(leftIndexes))*(np.pi/2) #for index 134 (of 270, maxIndex = 269)
@@ -85,9 +85,9 @@ class Chris:
             #print("L", lhsInnerAngleSum)
             return lhsInnerAngleSum
 
-    def getRightAngle(self, ranges):
-        third = int(len(ranges)/3)
-        rightIndexes = ranges[(2*third):len(ranges)]
+    def getRightAngle(self, proc_ranges):
+        third = int(len(proc_ranges)/3)
+        rightIndexes = proc_ranges[(2*third):len(proc_ranges)]
         #calculate RHS using full pi/2 RHS scanner range
         #RHS index 0 angle = 0
         rhsI2Angle = ((len(rightIndexes)/2)/len(rightIndexes))*(np.pi/2) #for index 134 (of 270, maxIndex = 269)
