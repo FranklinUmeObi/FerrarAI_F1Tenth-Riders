@@ -52,7 +52,6 @@ class Sam:
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
 
-
 class Chris:
     
     CAR_WIDTH = 0.31
@@ -63,70 +62,23 @@ class Chris:
     # the extra safety room we plan for along walls (as a percentage of car_width/2)
     SAFETY_PERCENTAGE = 300.
 
-    #below 4 funcs tell if car is on straight, can use this to accel faster here
-    def getLeftAngle(self, proc_ranges):
-            third = int(len(proc_ranges)/3)
-            leftIndexes = proc_ranges[0:third]
+    def get_speed(self, ranges, max_disp,min_disp,proc_ranges,speed):
+        if (ranges[int(len(ranges)/2)] < 6) and (speed > 3) and (ranges[int(len(ranges)/2)+2] < 6) and (ranges[int(len(ranges)/2)-2] < 6):
+            speed = speed * 0.4
+        elif (ranges[int(len(ranges)/2)] < 10) and (speed > 9):
+            speed = speed * 0.5
+        elif (ranges[int(len(ranges)/2)] < 12) and (speed > 10):
+            speed = 9
+        else:
+            if speed < 8:
+                speed = speed * 1.1
+            if speed < 10:
+                speed = speed * 1.5
+            else:
+                speed = self.MAX_SPEED
 
-            #calculate lhs using full pi/2 lhs scanner range
-            lhsI2Angle = ((len(leftIndexes)/2)/len(leftIndexes))*(np.pi/2) #for index 134 (of 270, maxIndex = 269)
-            lhsI3Angle = np.pi/2 - lhsI2Angle # pi/2 window minus other angle in it
+        return speed
 
-            lhsInnerAngleB = m.asin((leftIndexes[269]*m.sin(lhsI3Angle))
-                /(m.sqrt((leftIndexes[269]*leftIndexes[269])+(leftIndexes[134]*leftIndexes[134]) 
-                - (2*leftIndexes[269]*leftIndexes[134]*m.cos(lhsI3Angle)))))
-            
-            lhsInnerAngleA = m.asin((leftIndexes[0]*m.sin(lhsI2Angle))
-                /(m.sqrt((leftIndexes[0]*leftIndexes[0])+(leftIndexes[134]*leftIndexes[134]) 
-                - (2*leftIndexes[0]*leftIndexes[134]*m.cos(lhsI2Angle)))))
-
-            lhsInnerAngleSum = lhsInnerAngleA+lhsInnerAngleB
-
-            #print("L", lhsInnerAngleSum)
-            return lhsInnerAngleSum
-
-    def getRightAngle(self, proc_ranges):
-        third = int(len(proc_ranges)/3)
-        rightIndexes = proc_ranges[(2*third):len(proc_ranges)]
-        #calculate RHS using full pi/2 RHS scanner range
-        #RHS index 0 angle = 0
-        rhsI2Angle = ((len(rightIndexes)/2)/len(rightIndexes))*(np.pi/2) #for index 134 (of 270, maxIndex = 269)
-        rhsI3Angle = np.pi/2 - rhsI2Angle # pi/2 window minus other angle in it
-
-        rhsInnerAngleB = m.asin((rightIndexes[269]*m.sin(rhsI3Angle))
-            /(m.sqrt((rightIndexes[269]*rightIndexes[269])+(rightIndexes[134]*rightIndexes[134]) 
-            - (2*rightIndexes[269]*rightIndexes[134]*m.cos(rhsI3Angle)))))
-        
-        rhsInnerAngleA = m.asin((rightIndexes[0]*m.sin(rhsI2Angle))
-            /(m.sqrt((rightIndexes[0]*rightIndexes[0])+(rightIndexes[134]*rightIndexes[134]) 
-            - (2*rightIndexes[0]*rightIndexes[134]*m.cos(rhsI2Angle)))))
-
-        rhsInnerAngleSum = rhsInnerAngleA+rhsInnerAngleB #when its a straight this gets around 2.6 idk why, should be 3.14 (pi)
-        #print("R", rhsInnerAngleSum)
-        #end of rhs calculations
-        return rhsInnerAngleSum
-
-    def frontIsClear(self, proc_ranges):
-        third = int(len(proc_ranges)/3)
-        forwardIndexes = proc_ranges [third:(2*third)]
-        isFrontClear = -1
-        #index 134 is directly ahead, 104 is 10 degrees left of centre, 154 was meant
-        #to be 164 to be 10 degrees to the right but this works so im not changing it haha
-        sumof3 = forwardIndexes[104]+forwardIndexes[134]+forwardIndexes[154]
-        if(sumof3 > 65): #when it's on a straight the sum of the 3 angles is above 65
-            isFrontClear =1
-        return isFrontClear
-
-    def isOnStraight(self, proc_ranges, rightAngle, leftAngle):
-        onStraight = -1
-        if ((leftAngle < 2.72 and leftAngle > 2.5)and(rightAngle < 2.55 or rightAngle >2.35)
-        and(self.frontIsClear(proc_ranges)>0)):
-            print('On Straight ','L= ', leftAngle,', R= ', rightAngle)
-            onStraight = 1
-        return onStraight
-
-
-    
     def preprocess_lidar(self, ranges):
         """ Any preprocessing of the LiDAR data can be done in this function.
             Possible Improvements: smoothing of outliers in the data and placing
@@ -251,30 +203,6 @@ class Chris:
 
         return steering_angle
     
-    def get_speed(self, ranges, max_disp,min_disp,proc_ranges,speed):
-        # speed = 12
-        # if (ranges[max_disp] - ranges[min_disp]) < 0.5:
-        #     speed = speed * 0.2
-        # if max_disp < 100 or max_disp>980:
-        #     speed = speed * 0.2
-        # if ranges[max_disp] < 3:
-        #     speed = speed *0.2
-        test = self.isOnStraight(proc_ranges, self.getRightAngle(proc_ranges), self.getLeftAngle(proc_ranges))
-        if (ranges[int(len(ranges)/2)] < 6) and (speed > 3) and (ranges[int(len(ranges)/2)+2] < 6) and (ranges[int(len(ranges)/2)-2] < 6):
-            speed = speed * 0.4
-        elif (ranges[int(len(ranges)/2)] < 10) and (speed > 9):
-            speed = speed * 0.5
-        elif (ranges[int(len(ranges)/2)] < 12) and (speed > 10):
-            speed = 9
-        else:
-            if speed < 8:
-                speed = speed * 1.1
-            if speed < 10:
-                speed = speed * 1.5
-            else:
-                speed = self.MAX_SPEED
-
-        return speed
     def process_lidar(self, ranges):
         """ Run the disparity extender algorithm!
             Possible improvements: varying the speed based on the
