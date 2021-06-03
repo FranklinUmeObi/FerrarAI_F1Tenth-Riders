@@ -5,7 +5,7 @@ import concurrent.futures
 import os
 import sys
 
-# Get ./src/ folder & add it to path
+# Get ./src/ folder & add it to paths
 current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
 
@@ -13,10 +13,10 @@ sys.path.append(current_dir)
 from drivers import DisparityExtender, Frank, GapFollower, Chris
 
 # choose your drivers here (1-4)
-drivers = [Chris()]
+drivers = [ Frank()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
-RACETRACK = 'SILVERSTONE'
+RACETRACK = 'SILVERSTONE_OBS'
 
 
 class GymRunner(object):
