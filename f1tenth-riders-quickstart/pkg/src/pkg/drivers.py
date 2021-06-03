@@ -90,8 +90,8 @@ class Chris:
     CAR_WIDTH = 0.31
     # the min difference between adjacent LiDAR points for us to call them disparate
     DIFFERENCE_THRESHOLD = 2.
-    SPEED = 12. 
-    MAX_SPEED = 13.0
+    SPEED = 13. 
+    MAX_SPEED = 13.5
     # the extra safety room we plan for along walls (as a percentage of car_width/2)
     SAFETY_PERCENTAGE = 300.
 
