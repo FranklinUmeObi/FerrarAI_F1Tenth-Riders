@@ -91,7 +91,7 @@ class Chris:
     # the min difference between adjacent LiDAR points for us to call them disparate
     DIFFERENCE_THRESHOLD = 2.
     SPEED = 12. 
-    MAX_SPEED = 12.0
+    MAX_SPEED = 13.0
     # the extra safety room we plan for along walls (as a percentage of car_width/2)
     SAFETY_PERCENTAGE = 300.
 
@@ -227,7 +227,7 @@ class Chris:
         # if ranges[max_disp] < 3:
         #     speed = speed *0.2
         if (ranges[int(len(ranges)/2)] < 6) and (speed > 3) and (ranges[int(len(ranges)/2)+2] < 6) and (ranges[int(len(ranges)/2)-2] < 6):
-            speed = speed * 0.5
+            speed = speed * 0.6
         elif (ranges[int(len(ranges)/2)] < 10) and (speed > 9):
             speed = speed * 0.7
         elif (ranges[int(len(ranges)/2)] < 12) and (speed > 10):
