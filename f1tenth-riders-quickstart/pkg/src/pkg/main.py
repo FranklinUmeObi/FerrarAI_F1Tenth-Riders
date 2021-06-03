@@ -13,7 +13,7 @@ sys.path.append(current_dir)
 from drivers import DisparityExtender, Frank, GapFollower, Chris
 
 # choose your drivers here (1-4)
-drivers = [ Frank()]
+drivers = [ Chris()]
 
 # choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
 RACETRACK = 'SILVERSTONE_OBS'
